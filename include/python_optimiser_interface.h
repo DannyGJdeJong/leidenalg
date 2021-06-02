@@ -5,6 +5,7 @@
 #include <igraph.h>
 #include "GraphHelper.h"
 #include "ModularityVertexPartition.h"
+#include "ConductanceVertexPartition.h"
 #include "SignificanceVertexPartition.h"
 #include "SurpriseVertexPartition.h"
 #include "RBConfigurationVertexPartition.h"

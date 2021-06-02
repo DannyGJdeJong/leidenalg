@@ -215,6 +215,53 @@ extern "C"
     }
   }
 
+  PyObject* _new_ConductanceVertexPartition(PyObject *self, PyObject *args, PyObject *keywds)
+  {
+    PyObject* py_obj_graph = NULL;
+    PyObject* py_initial_membership = NULL;
+    PyObject* py_weights = NULL;
+    PyObject* py_node_sizes = NULL;
+
+    static const char* kwlist[] = {"graph", "initial_membership", "weights", "node_sizes", NULL};
+
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O|OOO", (char**) kwlist,
+                                     &py_obj_graph, &py_initial_membership, &py_weights, &py_node_sizes))
+        return NULL;
+
+    try
+    {
+
+      Graph* graph = create_graph_from_py(py_obj_graph, py_node_sizes, py_weights);
+
+      ConductanceVertexPartition* partition = NULL;
+
+      // If necessary create an initial partition
+      if (py_initial_membership != NULL && py_initial_membership != Py_None)
+      {
+        vector<size_t> initial_membership = create_size_t_vector(py_initial_membership);
+
+        partition = new ConductanceVertexPartition(graph, initial_membership);
+      }
+      else
+        partition = new ConductanceVertexPartition(graph);
+
+      // Do *NOT* forget to remove the graph upon deletion
+      partition->destructor_delete_graph = true;
+
+      PyObject* py_partition = capsule_MutableVertexPartition(partition);
+      #ifdef DEBUG
+        cerr << "Created capsule partition at address " << py_partition << endl;
+      #endif
+
+      return py_partition;
+    }
+    catch (std::exception& e )
+    {
+      string s = "Could not construct partition: " + string(e.what());
+      PyErr_SetString(PyExc_BaseException, s.c_str());
+      return NULL;
+    }
+  }
 
   PyObject* _new_SignificanceVertexPartition(PyObject *self, PyObject *args, PyObject *keywds)
   {

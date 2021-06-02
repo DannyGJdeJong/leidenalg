@@ -184,6 +184,11 @@ class ModularityVertexPartitionTest(BaseTest.MutableVertexPartitionTest):
     super(ModularityVertexPartitionTest, self).setUp()
     self.partition_type = leidenalg.ModularityVertexPartition
 
+class ConductanceVertexPartitionTest(BaseTest.MutableVertexPartitionTest):
+  def setUp(self):
+    super(ConductanceVertexPartitionTest, self).setUp()
+    self.partition_type = leidenalg.ConductanceVertexPartition
+
 class RBERVertexPartitionTest(BaseTest.MutableVertexPartitionTest):
   def setUp(self):
     super(RBERVertexPartitionTest, self).setUp()
